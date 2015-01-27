@@ -29,3 +29,8 @@ RUN sed -i " \
     /etc/init.d/jmxtrans
 ADD sources/preinit.sh /usr/share/jmxtrans/preinit.sh
 
+ADD sources/jmxtrans /etc/init.d/jmxtrans
+
+ENTRYPOINT ["/etc/init.d/jmxtrans"]
+CMD ["start"]
+
