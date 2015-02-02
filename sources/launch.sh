@@ -3,6 +3,10 @@
 # Check defaut config exists for jmxtrans
 #
 
+
+# lancement
+export CONF_FILE="${jmxtrans_conf_dir}/jmxtrans"
+
 if [ ! -z "$jmxtrans_conf_dir" ]; then
   echo "Checking config dir $jmxtrans_conf_dir"
   
@@ -23,3 +27,5 @@ if [ ! -z "$jmxtrans_conf_dir" ]; then
 else
   echo "No config dir variable jmxtrans_conf_dir"
 fi
+
+sh /usr/share/jmxtrans/jmxtrans.sh start

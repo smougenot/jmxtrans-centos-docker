@@ -7,7 +7,7 @@ ENV jmxtrans_version 20121016.145842.6a28c97fbb-0
 RUN wget "https://github.com/downloads/jmxtrans/jmxtrans/jmxtrans-${jmxtrans_version}.noarch.rpm"
 RUN yum localinstall -y "jmxtrans-${jmxtrans_version}.noarch.rpm" && \
     yum clean all && \ 
-	rm -f jmxtrans.rpm
+	rm -f jmxtrans*.rpm
 
 # Changes :
 # Config is changed to /etc/jmxtrans/jmxtrans to be exposed using volume
@@ -21,16 +21,13 @@ VOLUME /etc/jmxtrans
 VOLUME /var/lib/jmxtrans
 VOLUME /var/log/jmxtrans
 
+# keep the shell running after java process launch
 RUN sed -i " \
-    s|/etc/sysconfig/jmxtrans|${jmxtrans_conf_dir}/jmxtrans|g; \
-    s|/var/lock/subsys/jmxtrans|/var/lock/jmxtrans|g; \
-    s|^\(### END INIT INFO\)$|\1\nsh /usr/share/jmxtrans/preinit.sh|g \
+    s|\(\$JAVA.*\)2>&1 &|\1|g \
 	" \
-    /etc/init.d/jmxtrans
-ADD sources/preinit.sh /usr/share/jmxtrans/preinit.sh
+    /usr/share/jmxtrans/jmxtrans.sh
 
-ADD sources/jmxtrans /etc/init.d/jmxtrans
+ADD sources/launch.sh /usr/share/jmxtrans/launch.sh
 
-ENTRYPOINT ["/etc/init.d/jmxtrans"]
-CMD ["start"]
+ENTRYPOINT ["/usr/share/jmxtrans/launch.sh"]
 
