@@ -29,5 +29,7 @@ RUN sed -i " \
 
 ADD sources/launch.sh /usr/share/jmxtrans/launch.sh
 
+RUN chmod +x /usr/share/jmxtrans/launch.sh
+
 ENTRYPOINT ["/usr/share/jmxtrans/launch.sh"]
 
